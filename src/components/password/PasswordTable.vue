@@ -1,36 +1,24 @@
 <template>
-  <div>
-    <b-row>
-      <b-col cols="12">
-        <b-table id="password-table" :items="filteredTable" :per-page="perPage" :current-page="currentPage" :fields="fields">
-          <template slot="actions" slot-scope="data">
-            <b-button @click="editButtonCallback(data.index)" class="edit-button" size="sm" variant="outline-warning"><i class="fas fa-edit text"></i></b-button>
-            <b-button @click="removeButtonCallback(data.index)" class="remove-button" size="sm"  variant="outline-danger"><i class="far fa-trash-alt"></i></b-button>
-          </template>
-        </b-table>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols="4"></b-col>
-      <b-col cols="4">
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="rows"
-          :per-page="perPage"
-          aria-controls="password-table"
-        ></b-pagination>
-      </b-col>
-      <b-col cols="4">
-        <select class="w-25 float-right" v-model="perPage">
-          <option>5</option>
-          <option>10</option>
-          <option>50</option>
-        </select>
-      </b-col>
-    </b-row>
-  </div>
+  <v-data-table :items="filteredTable" :headers="headers" :loading="loading" class="elevation-1">
+    <template v-slot:items="props">
+      <td>{{ props.item.id }}</td>
+      <td>{{ props.item.name }}</td>
+      <td>{{ props.item.username }}</td>
+      <td>{{ props.item.password }}</td>
+      <td>{{ props.item.email }}</td>
+      <td>{{ props.item.description }}</td>
+      <td>
+        <v-icon small class="mr-2" @click="editButtonCallback(props.item)">edit</v-icon>
+        <v-icon small @click="removeButtonCallback(props.item)">delete</v-icon>
+      </td>
+    </template>
+    <template v-slot:footer>
+      <td :colspan="headers.length">
+        <v-text-field  label="Search" prepend-icon="search" single-line @input="onSearchTyping"></v-text-field>
+      </td>
+    </template>
+  </v-data-table>
 </template>
-
 
 <script>
 export default {
@@ -38,44 +26,43 @@ export default {
     return {
       perPage: 5,
       currentPage: 1,
-      fields: ['id', 'name', 'username', 'password', 'email', 'description', 'actions']
+      headers: [
+        { text: "Id", align: "left", value: "id" },
+        { text: "Name", align: "left", value: "name" },
+        { text: "Username", align: "left", value: "username" },
+        { text: "Password", align: "left", value: "password" },
+        { text: "Email", align: "left", value: "email" },
+        { text: "Description", align: "left", value: "description" },
+        { text: "Actions", align: "left", value: "actions" }
+      ]
     };
   },
   props: {
     items: Array,
     editButtonCallback: Function,
-    removeButtonCallback: Function
+    removeButtonCallback: Function,
+    loading: Boolean
   },
   computed: {
-    rows() {
-      return this.items.length;
-    },
     filteredTable() {
       return this.items.filter(value => {
-        return value.name.toLowerCase().indexOf(this.$store.state.searchInputValue.toLowerCase()) > -1;
+        return (
+          value.name
+            .toLowerCase()
+            .indexOf(this.$store.getters.getSearchInputValue.toLowerCase()) > -1
+        );
       });
+    }
+  },
+  methods: {
+    onSearchTyping(value) {
+        this.$store.dispatch('handleSearchInputValue', value);
     }
   }
 };
 </script>
 
-<style scoped>
-
-@media all and (max-width: 854px) {
-  .edit-button {
-    margin-bottom: 10%;
-  }
-}
-
-
-@media all and (min-width: 854px) {
-  .edit-button {
-    margin-right: 10%;
-  }
-}
-
-
-
+<style>
 </style>
 
 

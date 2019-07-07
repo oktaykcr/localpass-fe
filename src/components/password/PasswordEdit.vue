@@ -1,61 +1,56 @@
 <template>
   <div>
-    <h2>Password {{type.charAt(0).toUpperCase() + type.slice(1)}}</h2>
-    <b-form @submit="onSubmit" @reset="onReset">
-      <b-form-group label-for="name">
-        <b-form-input
-          id="name"
-          :value="passwordChanged.name"
-          required
-          placeholder="Enter password name"
-        ></b-form-input>
-      </b-form-group>
+    <v-toolbar color="white" flat>
+      <v-toolbar-title class="grey--text text--darken-4">Password {{type.charAt(0).toUpperCase() + type.slice(1)}}</v-toolbar-title>
+    </v-toolbar>
+    <v-form @reset="onReset">
+      <v-container grid-list-md>
+        <v-layout row wrap>
+          <v-flex xs12>
+            <v-text-field id="name" label="Password Name" v-model="passwordChanged.name" required></v-text-field>
+            <v-text-field id="email" label="Email" v-model="passwordChanged.email" required></v-text-field>
+          </v-flex>
 
-      <b-form-group label-for="email">
-        <b-form-input
-          id="email"
-          v-model="passwordChanged.email"
-          required
-          placeholder="Enter email"
-        ></b-form-input>
-      </b-form-group>
+          <v-flex xs6>
+            <v-text-field
+              id="username"
+              label="Username"
+              v-model="passwordChanged.username"
+              required
+            ></v-text-field>
+          </v-flex>
 
-      <b-form-group>
-        <b-input-group>
-          <b-form-input
-            id="username"
-            v-model="passwordChanged.username"
-            required
-            placeholder="Enter username"
-          ></b-form-input>
-          <b-form-input
-            id="password"
-            v-model="passwordChanged.password"
-            required
-            placeholder="Enter password"
-          ></b-form-input>
-        </b-input-group>
-      </b-form-group>
+          <v-flex xs6>
+            <v-text-field
+              id="password"
+              label="Password"
+              v-model="passwordChanged.password"
+              required
+            ></v-text-field>
+          </v-flex>
 
-      <b-form-group>
-        <b-form-textarea
-          id="description"
-          v-model="passwordChanged.description"
-          placeholder="Enter password description"
-          rows="3"
-          max-rows="6"
-        ></b-form-textarea>
-      </b-form-group>
+          <v-flex xs12>
+            <v-textarea
+              id="description"
+              label="Description"
+              v-model="passwordChanged.description"
+              rows="3"
+              max-rows="6"
+            ></v-textarea>
+          </v-flex>
 
-      <b-button type="submit" variant="primary">{{type.charAt(0).toUpperCase() + type.slice(1)}}</b-button>
-      <b-button class="float-right" type="reset" variant="danger">Reset</b-button>
-    </b-form>
+          <v-btn color="primary" @click="onSubmit">{{type.charAt(0).toUpperCase() + type.slice(1)}}</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn class="float-right" type="reset" color="warning">Reset</v-btn>
+        </v-layout>
+      </v-container>
+    </v-form>
   </div>
 </template>
 
 
 <script>
-import { type } from 'os';
+import { type } from "os";
 export default {
   data() {
     return {
@@ -73,46 +68,46 @@ export default {
   },
   methods: {
     onSubmit() {
-      if(this.type == "add") {
-        this.$http.post('save', this.password).then(
+      if (this.type == "add") {
+        this.$http.post("save", this.password).then(
           response => {
-              
-          }, () => {
-            console.log("ERROR");
-            
+            this.$store.dispatch('addToPasswordList', response.body)
+          },
+          () => {
+           this.$store.dispatch('enableError', "Password couldn't save!")
           }
         );
       }
 
-      if(this.type == "edit") {
-        this.$http.put('update', this.password).then(
+      if (this.type == "edit") {
+        this.$http.put("update", this.password).then(
           response => {
-              
-          }, () => {
-            console.log("ERROR");
-            
+
+          },
+          () => {
+            this.$store.dispatch('enableError', "Password couldn't edit!")
           }
         );
       }
     },
     onReset(evt) {
       evt.preventDefault();
-      this.$store.dispatch('resetPassword');
+      this.$store.dispatch("resetPassword");
     }
   },
   computed: {
     passwordChanged() {
-      if(this.type == "edit") {
-        return this.password = this.$store.state.password;
+      if (this.type == "edit") {
+        return (this.password = this.$store.getters.getPassword);
       } else {
-        this.$store.dispatch('resetPassword');
+        this.$store.dispatch("resetPassword");
         this.password = {
           name: "",
           username: "",
           password: "",
           email: "",
           description: ""
-          };
+        };
         return this.password;
       }
     }

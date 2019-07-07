@@ -1,18 +1,25 @@
 <template>
-  <div>
-    <b-container>
-      <PasswordTable :items="password.items" :editButtonCallback="onClickEdit"  :removeButtonCallback="onClickRemove" />
-      <div>
-        <b-button variant="success" @click="onClickAdd" class="circular">
-          <i class="fas fa-plus-circle fa-lg"></i>
-        </b-button>
-      </div>
-      <div v-if="isFormShowing">
-        <PasswordEdit v-if="passwordForm === 'add'" type="add"/>
-        <PasswordEdit v-else type="edit"/>
-      </div>
-    </b-container>
-  </div>
+  <v-layout class="mt-5">
+    <v-flex xs12 sm6 offset-sm3>
+      <v-card>
+        <PasswordTable
+          :items="passwordList"
+          :editButtonCallback="onClickEdit"
+          :removeButtonCallback="onClickRemove"
+          :loading="loading"
+        />
+        <v-card-title v-if="isFormShowing">
+          <PasswordEdit v-if="passwordForm === 'add'" type="add" />
+          <PasswordEdit v-else type="edit" />
+        </v-card-title>
+        <v-card-actions style="height: 50px; position: relative">
+          <v-btn absolute dark fab right bottom color="pink" @click="onClickAdd">
+            <v-icon>add</v-icon>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
@@ -27,50 +34,54 @@ export default {
   },
   data() {
     return {
-      passwordForm: 'add',
+      passwordForm: "add",
       isFormShowing: false,
-      password: {
-        items: []
-      }
-    }
+      loading: false
+    };
   },
   methods: {
     onClickAdd() {
-        this.passwordForm = "add";
-        this.isFormShowing = true;
+      this.passwordForm = "add";
+      this.isFormShowing = true;
     },
-    onClickEdit(index) {
-        this.$store.dispatch('setPassword', this.password.items[index]);
-        this.passwordForm = "edit";
-        this.isFormShowing = true;
+    onClickEdit(passwordObj) {
+      this.$store.dispatch("setPassword", passwordObj);
+      this.passwordForm = "edit";
+      this.isFormShowing = true;
     },
-    onClickRemove(index) {
-      //remove from backend server
+    onClickRemove(passwordObj) {
+      this.$http.delete("delete", {params: {id: passwordObj.id}}).then(
+        response => {
+          if(response.data === true) {
+            this.$store.dispatch('deletePassword', passwordObj)
+          } else {
+            this.$store.dispatch('enableError', "Password couldn't delete!")
+          }
+        }
+      );
+    }
+  },
+  computed: {
+    passwordList() {
+      return this.$store.getters.getPasswordList
     }
   },
   created() {
-    this.$http.get('list').then(
+    this.loading = true
+    this.$http.get("list").then(
         response => {
-          console.log(response.body.data);
-          
-         this.password.items = response.body.data;
-        }, () => {
-          console.log("ERROR!");
+          this.$store.dispatch("setPasswordList", response.body.data)
+          this.loading = false
+        },
+        () => {
+          this.$store.dispatch('enableError', "Couldn't get passwords from server!")
+          this.loading = false
         }
-      );
+    );
   }
 };
 </script>
 
 <style scoped>
-.circular {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    margin: 5%;
-    border-radius: 50%;
-    height: 5%;
-    width: 5%;
-}
 </style>
 

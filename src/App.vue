@@ -1,20 +1,30 @@
 <template>
-  <div id="app">
-    <Navbar/>
-    <router-view/>
-  </div>
+  <v-app>
+    <Header/>
+    <Error/>
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+    <Footer/>
+  </v-app>
 </template>
 
 <script>
-import Navbar from '@/components/Navbar'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import Error from './components/Error'
 
 export default {
+  name: 'App',
   components: {
-    Navbar
+    Header,
+    Footer,
+    Error
+  },
+  data () {
+    return {
+      
+    }
   }
 }
 </script>
-
-
-<style>
-</style>

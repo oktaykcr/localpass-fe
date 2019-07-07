@@ -1,13 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import store from './store/store'
 
-import Home from './views/Password'
-import About from './views/About'
+import Home from './views/Home.vue'
+import Login from './views/Login.vue'
+import Register from './views/Register.vue'
+import Password from './views/Password'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -17,9 +20,26 @@ export default new Router({
       component: Home
     },
     {
-      path: '/about',
-      name: 'about',
-      component: About
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
+    },
+    {
+      path: '/password',
+      name: 'password',
+      component: Password
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  store.dispatch('disableError')
+  next()
+})
+
+export default router
