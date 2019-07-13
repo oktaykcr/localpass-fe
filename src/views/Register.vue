@@ -75,10 +75,17 @@
     methods: {
         onClickRegister() {
             if (this.$refs.form.validate()) {
-                console.log("SUCCESS");
-                this.$store.dispatch('register', this.user);
+                if(this.user.password === this.user.passwordconf) {
+                    var reqUser = {
+                        username: this.user.username,
+                        password: this.user.password
+                    }
+                    this.$store.dispatch('register', reqUser);
+                } else {
+                    this.$store.dispatch('enableError', "Please enter same passwords for confimation")
+                }
             } else {
-                console.log("FAIL");
+                this.$store.dispatch('enableError', "Please check form fields")
             }
         }
     }

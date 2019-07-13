@@ -69,7 +69,7 @@ export default {
   methods: {
     onSubmit() {
       if (this.type == "add") {
-        this.$http.post("save", this.password).then(
+        this.$http.post("password/save", this.password).then(
           response => {
             this.$store.dispatch('addToPasswordList', response.body)
           },
@@ -80,7 +80,7 @@ export default {
       }
 
       if (this.type == "edit") {
-        this.$http.put("update", this.password).then(
+        this.$http.put("password/update", this.password).then(
           response => {
 
           },

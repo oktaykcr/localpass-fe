@@ -50,7 +50,7 @@ export default {
       this.isFormShowing = true;
     },
     onClickRemove(passwordObj) {
-      this.$http.delete("delete", {params: {id: passwordObj.id}}).then(
+      this.$http.delete("password/delete", {params: {id: passwordObj.id}}).then(
         response => {
           if(response.data === true) {
             this.$store.dispatch('deletePassword', passwordObj)
@@ -68,7 +68,7 @@ export default {
   },
   created() {
     this.loading = true
-    this.$http.get("list").then(
+    this.$http.get("password/list").then(
         response => {
           this.$store.dispatch("setPasswordList", response.body.data)
           this.loading = false
