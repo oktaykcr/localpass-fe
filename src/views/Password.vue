@@ -68,7 +68,7 @@ export default {
   },
   created() {
     this.loading = true
-    this.$http.get("password/list").then(
+    this.$http.get("password/list", {params: { username: this.$store.getters.username }}).then(
         response => {
           this.$store.dispatch("setPasswordList", response.body.data)
           this.loading = false
