@@ -7,8 +7,9 @@ const state = {
 };
 
 const mutations = {
-    authUser(state, token) {
-        state.token = token
+    authUser(state, authData) {
+        state.token = authData.token
+        state.username = authData.username
     },
     clearAuthData(state) {
         state.token = null
@@ -29,7 +30,11 @@ const actions = {
     login({ commit, dispatch }, user) {
         Vue.http.post("user/login", {}, {params: {username: user.username, password: user.password}}).then(
             response => {
-                commit('authUser', response.headers.get('Authorization'))
+                var authData = {
+                    token: response.headers.get('Authorization'),
+                    username: response.headers.get('Username')
+                }
+                commit('authUser', authData)
                 router.replace('/password')
             }, error => {
                 dispatch('enableError', "Authentication Failed")
