@@ -42,7 +42,7 @@ export default {
   methods: {
     onClickAdd() {
       this.passwordForm = "add";
-      this.isFormShowing = true;
+      this.isFormShowing = !this.isFormShowing;
     },
     onClickEdit(passwordObj) {
       this.$store.dispatch("setPassword", passwordObj);

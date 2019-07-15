@@ -1,7 +1,6 @@
 <template>
   <v-data-table :items="filteredTable" :headers="headers" :loading="loading" class="elevation-1">
     <template v-slot:items="props">
-      <td>{{ props.item.id }}</td>
       <td>{{ props.item.name }}</td>
       <td>{{ props.item.username }}</td>
       <td>{{ props.item.password }}</td>
@@ -27,7 +26,6 @@ export default {
       perPage: 5,
       currentPage: 1,
       headers: [
-        { text: "Id", align: "left", value: "id" },
         { text: "Name", align: "left", value: "name" },
         { text: "Username", align: "left", value: "username" },
         { text: "Password", align: "left", value: "password" },
