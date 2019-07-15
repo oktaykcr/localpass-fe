@@ -8,10 +8,7 @@
           :removeButtonCallback="onClickRemove"
           :loading="loading"
         />
-        <v-card-title v-if="isFormShowing">
-          <PasswordEdit v-if="passwordForm === 'add'" type="add" />
-          <PasswordEdit v-else type="edit" />
-        </v-card-title>
+        <PasswordEdit :type="passwordForm" />
         <v-card-actions style="height: 50px; position: relative">
           <v-btn absolute dark fab right bottom color="pink" @click="onClickAdd">
             <v-icon>add</v-icon>
@@ -35,19 +32,18 @@ export default {
   data() {
     return {
       passwordForm: "add",
-      isFormShowing: false,
       loading: false
     };
   },
   methods: {
     onClickAdd() {
       this.passwordForm = "add";
-      this.isFormShowing = !this.isFormShowing;
+      this.$store.dispatch('showDialog', true)
     },
     onClickEdit(passwordObj) {
       this.$store.dispatch("setPassword", passwordObj);
       this.passwordForm = "edit";
-      this.isFormShowing = true;
+      this.$store.dispatch('showDialog', true)
     },
     onClickRemove(passwordObj) {
       this.$http.delete("password/delete", {params: {id: passwordObj.id}}).then(

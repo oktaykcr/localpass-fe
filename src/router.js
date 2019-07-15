@@ -32,7 +32,15 @@ const router = new Router({
     {
       path: '/password',
       name: 'password',
-      component: Password
+      component: Password,
+      beforeEnter(to, from, next) {
+        if(store.getters.token) {
+          next()
+        } else {
+          next('/')
+        }
+      }
+
     }
   ]
 })

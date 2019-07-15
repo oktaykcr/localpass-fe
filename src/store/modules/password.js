@@ -1,7 +1,8 @@
 const state = {
     searchInputValue: "",
     password: {},
-    passwordList: []
+    passwordList: [],
+    isDialogOpen: false
 };
 
 const mutations = {
@@ -23,6 +24,9 @@ const mutations = {
     DELETE_PASSWORD(state, passwordObject) {
         const index = state.passwordList.indexOf(passwordObject)
         state.passwordList.splice(index, 1)
+    },
+    SHOW_DIALOG(state, value) {
+        state.isDialogOpen = value
     }
 };
 
@@ -49,6 +53,9 @@ const actions = {
     },
     addToPasswordList({ commit }, passwordObject) {
         commit('ADD_TO_PASSWORD_LIST', passwordObject)
+    },
+    showDialog({ commit }, value) {
+        commit('SHOW_DIALOG', value)
     }
 };
 
@@ -61,6 +68,9 @@ const getters = {
     },
     getPasswordList(state) {
         return state.passwordList
+    },
+    isDialogOpen(state) {
+        return state.isDialogOpen
     }
 };
 
