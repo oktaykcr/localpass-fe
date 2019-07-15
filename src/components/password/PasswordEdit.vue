@@ -71,7 +71,8 @@ export default {
       if (this.type == "add") {
         this.$http.post("password/save", {passwordEntity: this.password, username: this.$store.getters.username}).then(
           response => {
-            this.$store.dispatch('addToPasswordList', response.body)
+            this.password.id = response.body.id
+            this.$store.dispatch('addToPasswordList', this.password)
           },
           () => {
            this.$store.dispatch('enableError', "Password couldn't save!")
