@@ -2,6 +2,7 @@
   <v-app>
     <Header/>
     <Error/>
+    <SuccessMessage/>
     <v-content>
       <router-view></router-view>
     </v-content>
@@ -13,18 +14,15 @@
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Error from './components/Error'
+import SuccessMessage from "./components/SuccessMessage"
 
 export default {
   name: 'App',
   components: {
     Header,
     Footer,
-    Error
-  },
-  data () {
-    return {
-      
-    }
+    Error,
+    SuccessMessage
   }
 }
 </script>
