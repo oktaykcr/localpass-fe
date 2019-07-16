@@ -82,6 +82,7 @@ export default {
               this.password.id = response.body.id;
               this.$store.dispatch("addToPasswordList", this.password);
               this.$store.dispatch("showDialog", false);
+              this.$store.dispatch("enableSuccessMessage", "Password is saved successfully")
             },
             () => {
               this.$store.dispatch("enableError", "Password couldn't save!");
@@ -93,6 +94,7 @@ export default {
         this.$http.put("password/update", this.password).then(
           response => {
             this.$store.dispatch("showDialog", false);
+            this.$store.dispatch("enableSuccessMessage", "Password is updated successfully")
           },
           () => {
             this.$store.dispatch("enableError", "Password couldn't edit!");
@@ -111,8 +113,6 @@ export default {
   computed: {
     isDialogOpen() {
       if (this.type == "edit") {
-        console.log(this.$store.getters.getPassword);
-        
         this.password = this.$store.getters.getPassword
       } else {
         this.$store.dispatch("resetPassword");

@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import PasswordTable from "../components/password/PasswordTable";
-import PasswordEdit from "../components/password/PasswordEdit";
+import PasswordTable from "../components/password/PasswordTable"
+import PasswordEdit from "../components/password/PasswordEdit"
 
 export default {
   name: "password",
