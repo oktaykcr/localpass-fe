@@ -5,7 +5,7 @@
         <v-card-title>
           <span class="headline">Password {{type.charAt(0).toUpperCase() + type.slice(1)}}</span>
           <v-spacer></v-spacer>
-          <v-btn icon light @click="closeDialog">
+          <v-btn icon @click="closeDialog">
             <v-icon>close</v-icon>
           </v-btn>
         </v-card-title>

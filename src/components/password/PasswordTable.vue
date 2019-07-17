@@ -13,7 +13,7 @@
     </template>
     <template v-slot:footer>
       <td :colspan="headers.length">
-        <v-text-field  label="Search" prepend-icon="search" single-line @input="onSearchTyping"></v-text-field>
+        <v-text-field  label="Search" prepend-icon="search" @input="onSearchTyping" clearable></v-text-field>
       </td>
     </template>
   </v-data-table>
