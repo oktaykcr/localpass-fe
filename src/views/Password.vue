@@ -50,6 +50,7 @@ export default {
         response => {
           if(response.data === true) {
             this.$store.dispatch('deletePassword', passwordObj)
+            this.$store.dispatch('enableSuccessMessage', "Password is deleted successfully")
           } else {
             this.$store.dispatch('enableError', "Password couldn't delete!")
           }
