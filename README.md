@@ -25,3 +25,7 @@ The project consist of two side. The [backend](https://github.com/oktaykcr/local
 
 1. Install dependencies with `npm install`
 2. Run frontend server `npm run serve` on port **8080**
+
+<br/>
+
+![localpassgif](localpass.gif)
